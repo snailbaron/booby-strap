@@ -1,0 +1,2 @@
+build --disk_cache=~/.cache/bazel-disk-cache
+build --experimental_disk_cache_gc_max_size=50G

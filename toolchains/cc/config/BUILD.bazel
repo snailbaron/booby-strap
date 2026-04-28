@@ -1,0 +1,6 @@
+load("bootstrap.bzl", "bootstrap")
+
+bootstrap(
+    name = "bootstrap",
+    visibility = ["//toolchains/cc:__pkg__"],
+)

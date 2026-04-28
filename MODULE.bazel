@@ -1,0 +1,15 @@
+module(name = "booby-strap")
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_cc", version = "0.2.18")
+
+bootlin_toolchain = use_repo_rule("//bzl:bootlin_toolchain.bzl", "bootlin_toolchain")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+bootlin_toolchain(
+    name = "bootstrap",
+    integrity = "sha256-dgrNXDFZRIthjiN7YZNTNbqtp0/gzcDXYRgmy0m0HIw=",
+    strip_prefix = "x86-64--glibc--stable-2025.08-1",
+    url = "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--stable-2025.08-1.tar.xz",
+)
