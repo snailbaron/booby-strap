@@ -3,16 +3,45 @@ package(default_visibility = ["//visibility:public"])
 exports_files(glob(["**"]))
 
 filegroup(
+    name = "builtin_include_directories",
+    srcs = [
+        "lib/gcc/x86_64-buildroot-linux-gnu/14.3.0/include",
+        "lib/gcc/x86_64-buildroot-linux-gnu/14.3.0/include-fixed",
+        "x86_64-buildroot-linux-gnu/include",
+        "x86_64-buildroot-linux-gnu/include/c++/14.3.0",
+        "x86_64-buildroot-linux-gnu/include/c++/14.3.0/backward",
+        "x86_64-buildroot-linux-gnu/include/c++/14.3.0/x86_64-buildroot-linux-gnu",
+        "x86_64-buildroot-linux-gnu/sysroot/usr/include",
+    ],
+)
+
+filegroup(
     name = "compiler_files",
     srcs = [
-        "bin/x86_64-linux-g++",
-        "bin/x86_64-linux-gcc",
-    ],
+        "bin/x86_64-linux-g++.br_real",
+        "bin/x86_64-linux-gcc.br_real",
+        "libexec/gcc/x86_64-buildroot-linux-gnu/14.3.0/cc1plus",
+    ] + glob([
+        "lib/gcc/x86_64-buildroot-linux-gnu/14.3.0/include/**",
+        "lib/gcc/x86_64-buildroot-linux-gnu/14.3.0/include-fixed/**",
+        "x86_64-buildroot-linux-gnu/include/**",
+        "x86_64-buildroot-linux-gnu/sysroot/usr/include/**",
+    ]),
+)
+
+filegroup(
+    name = "linker_files",
+    srcs = [
+        "bin/x86_64-linux-g++.br_real",
+    ] + glob([
+        "x86_64-buildroot-linux-gnu/lib64/lib*.so*",
+    ]),
 )
 
 filegroup(
     name = "all_files",
     srcs = [
         ":compiler_files",
+        ":linker_files",
     ],
 )

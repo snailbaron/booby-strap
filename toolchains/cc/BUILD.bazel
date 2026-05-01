@@ -7,7 +7,7 @@ cc_toolchain(
     all_files = "@bootstrap//:all_files",
     compiler_files = "@bootstrap//:compiler_files",
     dwp_files = ":empty",
-    linker_files = ":empty",
+    linker_files = "@bootstrap//:linker_files",
     objcopy_files = ":empty",
     output_licenses = [],
     strip_files = ":empty",
