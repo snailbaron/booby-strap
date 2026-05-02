@@ -1,0 +1,33 @@
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("build_tool.bzl", "build_tool")
+
+build_tool(
+    name = "hex0",
+    src = "@stage0-posix//:hex0_src",
+    tool = "@stage0-posix//:hex0-seed",
+)
+
+diff_test(
+    name = "hex0-check",
+    failure_message = "Generated hex0 does not match the reference.",
+    file1 = "@stage0-posix//:hex0-seed",
+    file2 = ":hex0",
+)
+
+build_tool(
+    name = "hex1",
+    src = "@stage0-posix//:hex1_src",
+    tool = ":hex0",
+)
+
+build_tool(
+    name = "hex2-0",
+    src = "@stage0-posix//:hex2_src",
+    tool = ":hex1",
+)
+
+build_tool(
+    name = "catm",
+    src = "@stage0-posix//:catm.hex2",
+    tool = ":hex2-0",
+)

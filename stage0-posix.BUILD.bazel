@@ -1,0 +1,16 @@
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "hex0_src",
+    srcs = ["AMD64/hex0_AMD64.hex0"],
+)
+
+filegroup(
+    name = "hex0-seed",
+    srcs = ["bootstrap-seeds/POSIX/AMD64/hex0-seed"],
+)
+
+filegroup(
+    name = "hex1_src",
+    srcs = ["AMD64/hex1_AMD64.hex0"],
+)

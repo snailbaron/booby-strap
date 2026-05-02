@@ -1,5 +1,6 @@
 module(name = "booby-strap")
 
+bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.18")
 bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
@@ -27,6 +28,14 @@ filegroup(
     integrity = "sha256-2chsa12920Oj4IJwxYRPxRd9GUQs9bjfS+fAfNX6ODE=",
     strip_prefix = "glibc-2.43",
     url = "https://ftp.gnu.org/gnu/glibc/glibc-2.43.tar.xz",
+)
+
+http_archive(
+    name = "stage0-posix",
+    build_file = "stage0-posix.BUILD.bazel",
+    integrity = "sha256-9P3aZ13pCrA0/TRn70PN3/YbPTcvjg5cLSXRRfIkIm8=",
+    strip_prefix = "stage0-posix-1.9.1",
+    url = "https://github.com/oriansj/stage0-posix/releases/download/Release_1.9.1/stage0-posix-1.9.1.tar.gz",
 )
 
 register_toolchains(
