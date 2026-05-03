@@ -1,7 +1,9 @@
 package(default_visibility = ["//visibility:public"])
 
+exports_files(glob(["**"]))
+
 filegroup(
-    name = "hex0_src",
+    name = "hex0.hex0",
     srcs = ["AMD64/hex0_AMD64.hex0"],
 )
 
@@ -11,6 +13,31 @@ filegroup(
 )
 
 filegroup(
-    name = "hex1_src",
+    name = "hex1.hex0",
     srcs = ["AMD64/hex1_AMD64.hex0"],
+)
+
+filegroup(
+    name = "hex2.hex1",
+    srcs = ["AMD64/hex2_AMD64.hex1"],
+)
+
+filegroup(
+    name = "catm.hex2",
+    srcs = ["AMD64/catm_AMD64.hex2"],
+)
+
+filegroup(
+    name = "ELF.hex2",
+    srcs = ["AMD64/ELF-amd64.hex2"],
+)
+
+filegroup(
+    name = "M0.hex2",
+    srcs = ["AMD64/M0_AMD64.hex2"],
+)
+
+filegroup(
+    name = "cc.M1",
+    srcs = ["AMD64/cc_amd64.M1"],
 )

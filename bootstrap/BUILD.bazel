@@ -1,9 +1,13 @@
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
-load("build_tool.bzl", "build_tool")
+load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+load("bootstrap.bzl", "build_tool", "catm")
 
+##################################################
+# Phase-0 Rebuild hex0 from the hex0 seed
+##################################################
 build_tool(
     name = "hex0",
-    src = "@stage0-posix//:hex0_src",
+    src = "@stage0-posix//:hex0.hex0",
     tool = "@stage0-posix//:hex0-seed",
 )
 
@@ -14,20 +18,94 @@ diff_test(
     file2 = ":hex0",
 )
 
+#################################
+# Phase-1 Build hex1 from hex0  #
+#################################
 build_tool(
     name = "hex1",
-    src = "@stage0-posix//:hex1_src",
+    src = "@stage0-posix//:hex1.hex0",
     tool = ":hex0",
 )
 
+#################################
+# Phase-2 Build hex2 from hex1  #
+#################################
 build_tool(
     name = "hex2-0",
-    src = "@stage0-posix//:hex2_src",
+    src = "@stage0-posix//:hex2.hex1",
     tool = ":hex1",
 )
 
+#################################
+# Phase-2b Build catm from hex2 #
+#################################
 build_tool(
     name = "catm",
     src = "@stage0-posix//:catm.hex2",
     tool = ":hex2-0",
+)
+
+###############################
+# Phase-3 Build M0 from hex2  #
+###############################
+catm(
+    name = "M0.hex2",
+    input_files = [
+        "@stage0-posix//:ELF.hex2",
+        "@stage0-posix//:M0.hex2",
+    ],
+)
+
+build_tool(
+    name = "M0",
+    src = ":M0.hex2",
+    tool = ":hex2-0",
+)
+
+###################################
+# Phase-4 Build cc_amd64 from M0  #
+###################################
+run_binary(
+    name = "cc.hex2",
+    srcs = ["@stage0-posix//:cc.M1"],
+    outs = ["cc.hex2"],
+    args = [
+        "$(execpath @stage0-posix//:cc.M1)",
+        "$(execpath :cc.hex2)",
+    ],
+    tool = ":M0",
+)
+
+catm(
+    name = "cc-0.hex2",
+    input_files = [
+        "@stage0-posix//:ELF.hex2",
+        ":cc.hex2",
+    ],
+)
+
+build_tool(
+    name = "cc",
+    src = ":cc-0.hex2",
+    tool = ":hex2-0",
+)
+
+#########################################
+# Phase-5 Build M2-Planet from cc_amd64 #
+#########################################
+catm(
+    name = "M2-0.c",
+    input_files = [
+        "@stage0-posix//:M2libc/amd64/linux/bootstrap.c",
+        "@stage0-posix//:M2-Planet/cc.h",
+        "@stage0-posix//:M2libc/bootstrappable.c",
+        "@stage0-posix//:M2-Planet/cc_globals.c",
+        "@stage0-posix//:M2-Planet/cc_reader.c",
+        "@stage0-posix//:M2-Planet/cc_strings.c",
+        "@stage0-posix//:M2-Planet/cc_types.c",
+        "@stage0-posix//:M2-Planet/cc_emit.c",
+        "@stage0-posix//:M2-Planet/cc_core.c",
+        "@stage0-posix//:M2-Planet/cc_macro.c",
+        "@stage0-posix//:M2-Planet/cc.c",
+    ],
 )
